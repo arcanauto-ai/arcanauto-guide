@@ -1680,6 +1680,9 @@ code --install-extension anthropics.claude-code
           <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/></svg>
           MCPの追加方法（2通り）
         </h3>
+        <div class="p-2 bg-yellow-900/20 border border-yellow-700/40 rounded text-xs text-yellow-300 mb-3">
+          <strong>前提条件:</strong> <code class="inline-code">npx</code> を使うMCPにはNode.js、<code class="inline-code">uvx</code> を使うMCPにはPython + uv が必要です。
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <div class="text-sm font-bold text-blue-300 mb-2">方法1: コマンドで追加（簡単）</div>
@@ -1994,10 +1997,10 @@ ClaudeCode/
           <h3 class="font-semibold text-slate-200 mb-2">シンボリックリンク設定</h3>
           <p class="text-sm text-slate-400 mb-3">一度設定すれば Drive の内容が自動的に Claude から見えます。</p>
           <pre class="code-block"><code># macOS
-BASE="$HOME/Library/CloudStorage/GoogleDrive-your@email.com/マイドライブ/ClaudeCode"
+BASE="$HOME/Library/CloudStorage/GoogleDrive-your@email.com/My Drive（マイドライブ）/ClaudeCode"
 
 # Windows (WSL)
-BASE="/mnt/g/マイドライブ/ClaudeCode"
+BASE="/mnt/g/My Drive（マイドライブ）/ClaudeCode"
 
 # 共通 — シンボリックリンク作成
 mkdir -p ~/projects/shared
@@ -2537,7 +2540,7 @@ git push
             <span class="flex-shrink-0 w-7 h-7 rounded-full bg-yellow-900/60 text-yellow-300 text-xs font-bold flex items-center justify-center">A1</span>
             <div class="flex-1">
               <p class="text-sm font-medium text-slate-200">Drive にフォルダ構造を作成する</p>
-              <p class="text-xs text-slate-400 mb-2 mt-1">Google Drive の「マイドライブ」または「共有ドライブ」に以下の構造を作成します。</p>
+              <p class="text-xs text-slate-400 mb-2 mt-1">Google Drive の「My Drive（マイドライブ）」または「共有ドライブ」に以下の構造を作成します。</p>
               <pre class="code-block text-xs">Google Drive/
 └── ClaudeCode/              ← このフォルダをチームに共有する
     ├── CLAUDE.md.org        ← チーム共通ルール（管理者が管理）
