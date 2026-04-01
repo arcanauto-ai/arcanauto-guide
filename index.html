@@ -1244,24 +1244,139 @@ npm install -g @anthropic-ai/claude-code</pre>
         <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"/></svg> ディレクトリ構成
         <span class="level-badge badge-intermediate"><svg class="svg-icon" viewBox="0 0 10 10" fill="#fcd34d" aria-hidden="true"><circle cx="5" cy="5" r="5"/></svg> 中級</span>
       </div>
-      <div class="card">
-        <pre><code class="text-slate-300">~/.claude/
-├── settings.json        # グローバル設定
-├── CLAUDE.md            # グローバル指示
-├── keybindings.json     # キーバインドカスタマイズ
-├── agents/              # カスタムエージェント定義
-├── skills/              # スキルファイル（/コマンド）
-├── rules/               # コーディングルール
-│   ├── common/          # 共通ルール
-│   ├── python/          # Python固有
-│   ├── typescript/      # TypeScript固有
-│   └── ...
-├── projects/            # プロジェクト別メモリ
-│   └── -home-user/
+
+      <div class="space-y-4">
+
+        <!-- 全体マップ -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-3">~/.claude/ 全体マップ</h3>
+          <p class="text-sm text-slate-400 mb-3">Claude Code の設定はすべて <code class="inline-code">~/.claude/</code> に集約されます。OSやインストール方法に関わらず、このパスは固定です。</p>
+          <pre class="code-block text-xs"><code>~/.claude/
+│
+├── CLAUDE.md            ★ 自分で編集   グローバル指示・ルール（全プロジェクト共通）
+├── settings.json        ★ 自分で編集   権限・フック・モデル設定
+├── keybindings.json     ★ 自分で編集   キーバインドカスタマイズ
+│
+├── skills/              ★ 自分で追加   /コマンド として呼び出せるスキル集
+│   └── meeting-minutes/
+│       └── SKILL.md
+│
+├── agents/              ★ 自分で追加   カスタムサブエージェント定義
+│   └── my-reviewer.md
+│
+├── rules/               ★ 自分で追加   コーディングルール（言語別）
+│   ├── common/          共通ルール
+│   └── python/          Python固有ルール
+│
+├── projects/            ⚙ 自動生成    プロジェクト別の記憶・メモリ
+│   └── -home-user-myapp/       ← プロジェクトパスをハイフン変換したフォルダ名
 │       └── memory/
-│           ├── MEMORY.md       # メモリインデックス
-│           └── *.md            # 各メモリファイル
-└── todos/               # タスク管理</code></pre>
+│           ├── MEMORY.md       ← メモリインデックス（自動更新）
+│           └── user_role.md    ← 各メモリファイル（自動生成）
+│
+├── todos/               ⚙ 自動生成    タスク管理（Claude が自動作成）
+└── statsig/             ⚙ 自動生成    機能フラグキャッシュ（触らない）</code></pre>
+
+          <!-- 凡例 -->
+          <div class="flex gap-4 mt-3 text-xs text-slate-400">
+            <span><span class="text-yellow-300 font-bold">★ 自分で編集</span> — 積極的に設定してカスタマイズする</span>
+            <span><span class="text-slate-500 font-bold">⚙ 自動生成</span> — Claude が管理。基本的に触らない</span>
+          </div>
+        </div>
+
+        <!-- ファイル別解説 -->
+        <div class="grid grid-cols-1 gap-3">
+
+          <div class="card border-yellow-500/20">
+            <h3 class="font-semibold text-yellow-300 mb-2">CLAUDE.md — Claudeへの「社則」</h3>
+            <p class="text-sm text-slate-400 mb-2">全プロジェクトで共通の指示を書くファイル。「どんな仕事をするか」「禁止事項は何か」「コスト上限は」などを記述します。</p>
+            <pre class="code-block text-xs"># ~/.claude/CLAUDE.md の役割
+・プロジェクトをまたいで常に読み込まれる
+・@参照でチーム共有ルールを取り込める
+・プロジェクト内の CLAUDE.md がある場合、そちらが優先</pre>
+          </div>
+
+          <div class="card border-blue-500/20">
+            <h3 class="font-semibold text-blue-300 mb-2">skills/ — /コマンドの実体</h3>
+            <p class="text-sm text-slate-400 mb-2">スキルは「フォルダ名 = コマンド名」です。<code class="inline-code">skills/code-review/SKILL.md</code> を置けば <code class="inline-code">/code-review</code> が使えます。</p>
+            <pre class="code-block text-xs">~/.claude/skills/
+└── code-review/        ← /code-review で呼び出せる
+    └── SKILL.md        ← プロンプト本文</pre>
+            <div class="mt-2 p-2 bg-blue-900/20 border border-blue-700/30 rounded text-xs text-blue-300">
+              チームで共有したい場合は <strong>Google Drive へのシンボリックリンク</strong>に変更（drive-setup セクション参照）
+            </div>
+          </div>
+
+          <div class="card border-violet-500/20">
+            <h3 class="font-semibold text-violet-300 mb-2">agents/ — カスタムサブエージェント</h3>
+            <p class="text-sm text-slate-400 mb-2">特定の役割を持つエージェントを定義します。Claude が自律的に使うか、明示的に <code class="inline-code">subagent_type</code> で指定します。</p>
+            <pre class="code-block text-xs"># ~/.claude/agents/my-reviewer.md
+---
+name: my-reviewer
+description: このプロジェクト専用のコードレビュアー
+model: claude-haiku-4-5-20251001   # 軽量モデルでコスト削減
+---
+
+レビュー時は以下の観点で確認してください:
+1. セキュリティ上の問題がないか
+2. このプロジェクトの命名規則に従っているか
+3. テストが書かれているか</pre>
+          </div>
+
+          <div class="card border-slate-500/20">
+            <h3 class="font-semibold text-slate-300 mb-2">projects/ — プロジェクト別の記憶</h3>
+            <p class="text-sm text-slate-400 mb-2">Claude がプロジェクトごとに自動で作成・管理するメモリ領域です。「あなたはPythonが得意なエンジニア」などの情報が蓄積されます。</p>
+            <pre class="code-block text-xs">~/.claude/projects/
+└── -home-arcanauto-myapp/     ← /home/arcanauto/myapp のパスをハイフン区切りに変換
+    └── memory/
+        ├── MEMORY.md           ← インデックス（どんな記憶があるかの目次）
+        ├── user_role.md        ← ユーザー情報
+        └── feedback_testing.md ← フィードバック記録</pre>
+            <p class="text-xs text-slate-500 mt-2">※ このフォルダは Claude が管理します。手動で書き換えると記憶が壊れることがあります。</p>
+          </div>
+        </div>
+
+        <!-- プロジェクト内CLAUDE.md -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">プロジェクト内にも CLAUDE.md を置ける</h3>
+          <p class="text-sm text-slate-400 mb-3">グローバルだけでなく、プロジェクトディレクトリ内に置いた CLAUDE.md はそのプロジェクトでのみ読み込まれます。優先順位は下図の通り。</p>
+          <div class="bg-slate-800/50 rounded p-3 text-xs font-mono space-y-1">
+            <div class="flex gap-2 items-center text-slate-500"><span>低</span><span class="flex-1 border-t border-dashed border-slate-700"></span><span>優先度</span><span class="flex-1 border-t border-dashed border-slate-700"></span><span>高</span></div>
+            <div class="flex gap-2 text-xs text-center">
+              <div class="flex-1 p-2 bg-slate-700/50 rounded text-slate-400">~/.claude/CLAUDE.md<br/><span class="text-slate-600">グローバル共通</span></div>
+              <div class="flex items-center text-slate-600">→</div>
+              <div class="flex-1 p-2 bg-yellow-900/30 rounded text-yellow-300">Drive/CLAUDE.md.org<br/><span class="text-yellow-600">@参照で取り込む</span></div>
+              <div class="flex items-center text-slate-600">→</div>
+              <div class="flex-1 p-2 bg-violet-900/30 rounded text-violet-300">~/project/CLAUDE.md<br/><span class="text-violet-600">プロジェクト固有（最優先）</span></div>
+            </div>
+          </div>
+          <pre class="code-block text-xs mt-3"># ~/myproject/CLAUDE.md（プロジェクト固有）
+@~/.claude/CLAUDE.md                           # グローバルルールを取り込む
+@/path/to/Drive/projects/myproject/CLAUDE.md.org  # チーム共通ルールを取り込む
+
+## このプロジェクト固有の指示
+- 使用DB: PostgreSQL 16
+- テスト: pytest + factory_boy
+- デプロイ: GitHub Actions → AWS ECS</pre>
+        </div>
+
+        <!-- Drive連携時の全体像 -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">Google Drive 連携時の全体像</h3>
+          <p class="text-sm text-slate-400 mb-3">シンボリックリンクを設定すると、<code class="inline-code">~/.claude/skills/</code> の実体が Google Drive になります。書き込みも Google Drive に直接反映されます。</p>
+          <pre class="code-block text-xs">【ローカル ~/.claude/】               【Google Drive】
+CLAUDE.md ─────────── @参照 ──────→  ClaudeCode/templates/CLAUDE.md.org
+settings.json （ローカル管理）
+keybindings.json（ローカル管理）
+skills/    ←── シンボリックリンク ──→  ClaudeCode/skills/
+agents/    ←── シンボリックリンク ──→  ClaudeCode/agents/
+rules/     ←── シンボリックリンク ──→  ClaudeCode/rules/
+projects/  （ローカル管理・共有しない）</pre>
+          <div class="mt-2 p-2 bg-slate-700/30 rounded text-xs text-slate-400">
+            <strong class="text-slate-300">projects/ は共有しない理由:</strong> 個人の記憶・会話履歴が含まれるため。チーム共有するのはスキル・ルール・エージェント定義のみ。
+          </div>
+        </div>
+
       </div>
     </section>
 
