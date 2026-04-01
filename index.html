@@ -2149,7 +2149,190 @@ skills_dir: ~/projects/shared/skills
       </div>
     </section>
 
-    <!-- SKILL TEMPLATES -->
+    <!-- FILE MANAGEMENT -->
+    <section id="file-management" data-level="intermediate">
+      <div class="section-title">
+        <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"/></svg> 制作物・ファイル管理
+        <span class="level-badge badge-intermediate"><svg class="svg-icon" viewBox="0 0 10 10" fill="#fcd34d" aria-hidden="true"><circle cx="5" cy="5" r="5"/></svg> 中級</span>
+      </div>
+
+      <div class="space-y-4">
+
+        <!-- 基本設計 -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">ファイル管理の基本設計</h3>
+          <p class="text-sm text-slate-400 mb-3">制作物・データファイルを Claude が自律的に扱えるようにするには、<strong>場所・状態・目的</strong> の3つを CLAUDE.md に明記することが重要です。Claude はファイルシステムを直接読みにいくため、一覧ファイルがあると検索コストを大幅に削減できます。</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="p-3 rounded bg-slate-800 border border-slate-700">
+              <p class="text-xs font-semibold text-amber-300 mb-1">場所 (Where)</p>
+              <p class="text-xs text-slate-400">ファイルがどのディレクトリにあるか。CLAUDE.md にパスを明示する。</p>
+            </div>
+            <div class="p-3 rounded bg-slate-800 border border-slate-700">
+              <p class="text-xs font-semibold text-green-300 mb-1">状態 (Status)</p>
+              <p class="text-xs text-slate-400">企画中 / 開発中 / 完成 / 公開済 / アーカイブ のいずれか。</p>
+            </div>
+            <div class="p-3 rounded bg-slate-800 border border-slate-700">
+              <p class="text-xs font-semibold text-blue-300 mb-1">目的 (Purpose)</p>
+              <p class="text-xs text-slate-400">このファイルが何のためにあるか。Claude が判断に使う。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- フォルダ構成 -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">推奨フォルダ構成（汎用）</h3>
+          <p class="text-sm text-slate-400 mb-3">プロジェクト単位でフォルダを作り、ライフサイクルをフォルダ名で表現します。</p>
+          <pre class="code-block"><code>~/projects/
+  {project-name}/          ← kebab-case で命名
+    CLAUDE.md              ← このプロジェクト専用の指示
+    README.md
+    src/                   ← ソースコード
+    assets/                ← 画像・音声・フォントなど素材
+      images/
+      fonts/
+      icons/
+    data/                  ← データファイル（CSV, JSON, SQLite など）
+    outputs/               ← 生成物・レンダリング結果
+    docs/                  ← ドキュメント・仕様書
+    archive/               ← 完成後に保管する旧バージョン
+
+~/arcanauto/
+  knowledge/               ← 蓄積知識（Drive シンボリックリンク推奨）
+    index.md               ← ファイル一覧インデックス ★重要
+    products/              ← 制作物ごとの詳細記録
+    research/              ← 市場調査・競合分析
+    templates/             ← 再利用可能なテンプレート</code></pre>
+        </div>
+
+        <!-- knowledge/index.md テンプレート -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">knowledge/index.md — ファイル一覧インデックス</h3>
+          <p class="text-sm text-slate-400 mb-3">Claude が「何がどこにあるか」を一瞬で把握できるマスターインデックスです。新しいファイルを作るたびにここを更新します。</p>
+          <pre class="code-block"><code># ファイル一覧インデックス
+最終更新: 2026-04-01
+
+## 制作物 (products/)
+
+| ファイル / フォルダ | 状態 | 説明 | 更新日 |
+|---|---|---|---|
+| color-palette-gen/ | 公開済 | カラーパレット生成ツール (BOOTH #1) | 2026-03-15 |
+| pomodoro-timer/ | 開発中 | ポモドーロタイマー | 2026-04-01 |
+| markdown-converter/ | 企画中 | Markdown→HTML変換ツール | — |
+
+## データファイル (data/)
+
+| ファイル | 種別 | 説明 | 更新日 |
+|---|---|---|---|
+| booth-sales.csv | CSV | BOOTH販売実績データ | 2026-03-31 |
+| competitor-prices.json | JSON | 競合価格調査結果 | 2026-03-20 |
+
+## テンプレート (templates/)
+
+| ファイル | 用途 |
+|---|---|
+| CLAUDE.md.org | チーム共通 CLAUDE.md ベース |
+| booth-description.md | BOOTH商品説明文テンプレート |
+| weekly-report.md | 週次レポートテンプレート |</code></pre>
+          <div class="mt-3 p-2 rounded bg-green-900/20 border border-green-700/30">
+            <p class="text-xs text-green-300"><svg class="svg-icon inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> <strong>ポイント:</strong> CLAUDE.md に <code class="inline-code">@~/arcanauto/knowledge/index.md</code> を追記すると、Claude が毎回セッション開始時にファイル一覧を把握します。</p>
+          </div>
+        </div>
+
+        <!-- CLAUDE.md への記述例 -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">CLAUDE.md へのファイルパス明示（テンプレート）</h3>
+          <p class="text-sm text-slate-400 mb-3">プロジェクトの CLAUDE.md に以下を追記することで、Claude がファイルを探す手間を省けます。</p>
+          <pre class="code-block"><code># プロジェクト: {project-name}
+
+## ファイル構成
+- ソースコード: ./src/
+- 素材・アセット: ./assets/
+- データ: ./data/
+- 出力物: ./outputs/
+- ドキュメント: ./docs/
+
+## 重要ファイル
+- 設計書: ./docs/design.md
+- タスク一覧: ./docs/tasks.md
+- 販売ページ用説明文: ./docs/booth-description.md
+
+## 知識ベース参照
+@~/arcanauto/knowledge/index.md
+@~/projects/shared/templates/CLAUDE.md.org
+
+## 現在の状態
+ステータス: 開発中
+次のマイルストーン: BOOTH出品審査
+期限: 2026-04-15</code></pre>
+        </div>
+
+        <!-- ライフサイクル管理 -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">制作物のライフサイクル管理</h3>
+          <p class="text-sm text-slate-400 mb-3">制作物の状態を明確にすることで、Claude が「今何をすべきか」を自律的に判断できます。</p>
+          <div class="space-y-2">
+            <div class="flex items-start gap-3 p-3 rounded bg-slate-800 border border-slate-700">
+              <span class="text-xs font-bold text-slate-400 w-20 shrink-0 pt-0.5">企画中</span>
+              <div class="flex-1">
+                <p class="text-xs text-slate-300">アイデア段階。<code class="inline-code">knowledge/rejected-ideas.md</code> や <code class="inline-code">market-research.md</code> を参照して実現可能性を検討する。</p>
+                <p class="text-xs text-slate-500 mt-1">フォルダ: まだ作成しない。<code class="inline-code">index.md</code> に行だけ追加。</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded bg-slate-800 border border-yellow-800/40">
+              <span class="text-xs font-bold text-yellow-400 w-20 shrink-0 pt-0.5">開発中</span>
+              <div class="flex-1">
+                <p class="text-xs text-slate-300">承認後にフォルダを作成し、CLAUDE.md を設置。TDD で開発を進める。</p>
+                <p class="text-xs text-slate-500 mt-1">フォルダ: <code class="inline-code">~/projects/{name}/</code> を作成、Git 初期化。</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded bg-slate-800 border border-green-800/40">
+              <span class="text-xs font-bold text-green-400 w-20 shrink-0 pt-0.5">完成</span>
+              <div class="flex-1">
+                <p class="text-xs text-slate-300">BOOTH出品前チェックリストを全て通過した状態。人間のレビュー待ち。</p>
+                <p class="text-xs text-slate-500 mt-1">アクション: サムネイル作成・説明文作成・ZIP梱包を完了させる。</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded bg-slate-800 border border-blue-800/40">
+              <span class="text-xs font-bold text-blue-400 w-20 shrink-0 pt-0.5">公開済</span>
+              <div class="flex-1">
+                <p class="text-xs text-slate-300">BOOTH等で販売中。<code class="inline-code">knowledge/product-history.md</code> に記録を追加。売上・フィードバックを定期収集。</p>
+                <p class="text-xs text-slate-500 mt-1">フォルダ: そのまま保持。<code class="inline-code">outputs/</code> に公開版バイナリを保管。</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded bg-slate-800 border border-slate-600">
+              <span class="text-xs font-bold text-slate-400 w-20 shrink-0 pt-0.5">アーカイブ</span>
+              <div class="flex-1">
+                <p class="text-xs text-slate-300">販売終了・開発中断。<code class="inline-code">archive/</code> フォルダに移動し、理由をコメントに残す。</p>
+                <p class="text-xs text-slate-500 mt-1">フォルダ: <code class="inline-code">~/projects/archive/{name}/</code> に移動。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 既存データファイルの棚卸し手順 -->
+        <div class="card">
+          <h3 class="font-semibold text-slate-200 mb-2">既存データファイルの棚卸し手順</h3>
+          <p class="text-sm text-slate-400 mb-3">すでに持っているファイルを整理して Claude に把握させるための手順です。</p>
+          <ol class="space-y-2 text-sm text-slate-300 list-decimal list-inside">
+            <li>対象フォルダのファイル一覧を Claude に出力させる
+              <pre class="code-block mt-1"><code># Claude に依頼する例
+「~/Documents 以下の全ファイルを種別ごとに分類して
+knowledge/index.md の形式で一覧を作って」</code></pre>
+            </li>
+            <li>生成された一覧を <code class="inline-code">knowledge/index.md</code> に貼り付ける</li>
+            <li>各ファイルに状態（企画中/開発中/完成/公開済/アーカイブ）を付与する</li>
+            <li>CLAUDE.md に <code class="inline-code">@~/arcanauto/knowledge/index.md</code> を追記する</li>
+            <li>Claude で新しいセッションを開始して「ファイル一覧を確認して」と確認テストをする</li>
+          </ol>
+          <div class="mt-3 p-2 rounded bg-amber-900/20 border border-amber-700/30">
+            <p class="text-xs text-amber-300"><svg class="svg-icon inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg> <strong>注意:</strong> 一度に全ファイルを棚卸しすると Claude のコンテキストが溢れます。フォルダを分けて段階的に行ってください。</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DRIVE SETUP -->
     <section id="drive-setup" data-level="intermediate">
       <div class="section-title">
         <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/></svg> Google Drive連携設定
