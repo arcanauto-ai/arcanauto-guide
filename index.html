@@ -657,6 +657,20 @@ chmod 600 ~/.env
             デーモン・自動化スクリプトには必ず <span class="inline-code">ANTHROPIC_API_KEY</span> を設定してください。
           </div>
         </div>
+
+        <div class="mt-3 overflow-x-auto">
+          <table class="w-full text-xs text-slate-300">
+            <thead><tr class="border-b border-slate-700">
+              <th class="text-left py-1 pr-4">認証方式</th>
+              <th class="text-left py-1 pr-4">向いている場面</th>
+              <th class="text-left py-1">設定方法</th>
+            </tr></thead>
+            <tbody class="divide-y divide-slate-700/50">
+              <tr><td class="py-1 pr-4 font-medium text-green-300">OAuth（推奨）</td><td class="py-1 pr-4">対話型・日常利用・PC上で使う場合</td><td class="py-1"><code class="inline-code">claude</code> 起動→ブラウザ認証</td></tr>
+              <tr><td class="py-1 pr-4 font-medium text-yellow-300">APIキー</td><td class="py-1 pr-4">自動化・CI/CD・サーバー上で実行する場合</td><td class="py-1"><code class="inline-code">ANTHROPIC_API_KEY=sk-...</code></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -950,7 +964,7 @@ claude /path/to/project</code></pre>
             <ul class="text-xs text-slate-400 space-y-1">
               <li>• <span class="inline-code">Desktop/作業中/最終版2</span> — 深いネスト・日本語名は問題を起こしやすい</li>
               <li>• <span class="inline-code">~/Desktop/</span> — デスクトップに直置きは散らかる</li>
-              <li>• OneDrive / Google Drive 内 — 同期競合でファイルが壊れる場合あり</li>
+              <li>• OneDrive / Google Drive 内のプロジェクトコード — 同期ラグで git が壊れる可能性あり。ただし ~/.claude/ の設定ファイルはシンボリックリンク経由での Drive 連携は安全（中級章で解説）</li>
               <li>• パスにスペース・日本語を含む場所 — シェルコマンドでエラーになりやすい</li>
             </ul>
           </div>
@@ -1009,7 +1023,7 @@ claude /path/to/project</code></pre>
     <section id="faq" data-level="beginner">
       <h2 class="section-title">
         <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/></svg>
-        よくある質問 &amp; トラブル対処
+        よくある質問 & トラブル対処
       </h2>
       <p class="section-desc">Claude Code を使い始めると必ずぶつかる疑問をまとめました。</p>
 
@@ -2048,6 +2062,16 @@ skills_dir: ~/projects/shared/skills
 └── knowledge/ ────────→ [Google Drive]/ClaudeCode/knowledge/</pre>
             <p class="text-xs text-slate-500 mt-2">矢印先の実体は Drive 上にある。<br>Drive を更新すると全員に即時反映。</p>
           </div>
+        </div>
+
+        <div class="mt-3 p-3 bg-green-900/20 border border-green-700/40 rounded">
+          <p class="text-xs font-semibold text-green-300 mb-1">書き込みも Google Drive に直接反映される</p>
+          <p class="text-xs text-slate-400">シンボリックリンクは透過的です。<code class="inline-code">~/.claude/skills/</code> に新しいスキルを保存すると、実際には Google Drive 側に書き込まれます。Google Drive が同期すると、リンクしている全メンバーの環境に即時反映されます。</p>
+          <pre class="code-block text-xs mt-2">~/.claude/skills/ に保存
+    ↓ シンボリックリンクが転送
+  Drive/ClaudeCode/skills/ に書き込み
+    ↓ Google Drive が自動同期
+  チーム全員の ~/.claude/skills/ に反映</pre>
         </div>
       </div>
 
